@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,10 +22,12 @@ import org.mtec.pontoeletronico.domain.service.interfaces.PontoEletronicoService
 import com.thoughtworks.xstream.XStream;
 
 /**
- * @author maciel
+ * @author Maciel Escudero Bombonato - maciel.bombonato@gmail.com
  *
  */
 public class PontoEletronicoServiceTest {
+	
+	private static final Logger log = Logger.getLogger(PontoEletronicoServiceTest.class);
 
 	private PontoEletronico pontoEletronico;
 	
@@ -119,13 +122,13 @@ public class PontoEletronicoServiceTest {
 		assertNotNull(xml);
 		assertFalse(xml.equalsIgnoreCase(""));
 		
-		System.out.println(xml);
+		log.info(xml);
 		
 		PontoEletronico ponto = (PontoEletronico)xstream.fromXML(xml);
 		
 		assertNotNull(ponto);
 		
-		System.out.println(ponto);
+		log.info(ponto);
 	}
 	
 	/**
