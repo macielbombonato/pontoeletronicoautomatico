@@ -10,6 +10,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 import org.apache.log4j.Logger;
+import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
 import org.mtec.pontoeletronico.domain.Apontamento;
 import org.mtec.pontoeletronico.domain.Mes;
 import org.mtec.pontoeletronico.domain.Periodo;
@@ -26,8 +27,14 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 	
 	private static final Logger log = Logger.getLogger(PontoEletronicoServiceImpl.class);
 	
+	private PontoEletronico pontoEletronico;
+	
+	private PontoEletronicoConfig pontoEletronicoConfig;
+	
 	private final String DIRETORIO = System.getProperty("user.home") + "/pontoeletronico";
 	private static String NOME_ARQUIVO;
+	
+	private static final String NOME_ARQUIVO_CONFIG = "pontoEletronicoConfig.xml";
     
     static {
     	try {
@@ -45,6 +52,8 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
             boolean continuar = true;
             
         	PontoEletronico pontoEletronico = obterArquivoMarcacao();
+        	
+        	PontoEletronicoConfig pontoEletronicoConfig = obterArquivoConfiguracao();
 
             int contador = 0;
             
@@ -52,15 +61,15 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
                 contador++;
             	
             	if (pontoEletronico != null) {
-            		pontoEletronico.gerarPontoEletronico();
+            		pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
                 } else {
                     pontoEletronico = new PontoEletronico();
                     
-                    pontoEletronico.setNomeUsuario(System.getProperty("user.name"));
+                    pontoEletronico.setNomeUsuario(pontoEletronicoConfig.getNomeUsuario());
                     
                     pontoEletronico.setNomeComputador(InetAddress.getLocalHost().getHostName());
 
-                    pontoEletronico.gerarPontoEletronico();
+                    pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
                 }
 
 //                TODO contador = calcularHorasTrabalhadas(pontoEletronico, contador);
@@ -151,6 +160,51 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
         fos.close();
     }
     
+    /**
+     * Recupera arquivo de configuracao do sistema de ponto eletronico.
+     * @return PontoEletronicoConfig
+     * @throws IOException
+     */
+    private PontoEletronicoConfig obterArquivoConfiguracao() throws IOException {
+        log.info("Obtendo arquivo de configuracao do sistema de ponto eletronico.");
+        
+        PontoEletronicoConfig arquivoPontoEletronicoConfig = null;
+        
+        XStream xstream = getPontoEletronicoConfigSchema();
+        
+        File diretorioArquivo = new File(DIRETORIO);
+
+        if (!diretorioArquivo.exists()) {
+            diretorioArquivo.mkdir();
+        }
+
+        File arquivoConfiguracao = new File(DIRETORIO + "/" + NOME_ARQUIVO_CONFIG);
+        
+        if (!arquivoConfiguracao.exists()
+        || arquivoConfiguracao.length() < 10L) {
+        	File diretorio = new File(DIRETORIO);
+        	if (!diretorio.exists()) {
+        		diretorio.mkdir();
+        	}
+        	
+        	arquivoConfiguracao.createNewFile();
+            
+            arquivoPontoEletronicoConfig = new PontoEletronicoConfig();
+        } else {
+        	String xml = "";
+        	FileReader reader = new FileReader(arquivoConfiguracao);
+        	BufferedReader leitor = new BufferedReader( reader );  
+			String linha = null;  
+			while( ( linha = leitor.readLine() ) != null ) {  
+				xml += linha;  
+			}  
+
+        	arquivoPontoEletronicoConfig = (PontoEletronicoConfig) xstream.fromXML(xml);	
+        }
+
+        return arquivoPontoEletronicoConfig;
+    }
+    
 	/**
 	 * Retorna um objeto XStream com as definições do XML do sistema de ponto eletrônico.
 	 * @return XStream
@@ -171,5 +225,45 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 
 		return xstream;
 	}
+	
+	/**
+	 * Retorna um objeto XStream com as definições do XML da configuracao do sistema de ponto eletrônico.
+	 * @return XStream
+	 */
+	public XStream getPontoEletronicoConfigSchema() {
+		XStream xstream = new XStream();
+		
+		xstream.alias("PontoEletronicoConfig", PontoEletronicoConfig.class);
+		xstream.aliasField("meses", PontoEletronico.class, "mesesApontamento");
+		
+		return xstream;
+	}
+	
+	/**
+	 * @return the pontoEletronico
+	 */
+	public PontoEletronico getPontoEletronico() {
+		return pontoEletronico;
+	}
 
+	/**
+	 * @param pontoEletronico the pontoEletronico to set
+	 */
+	public void setPontoEletronico(PontoEletronico pontoEletronico) {
+		this.pontoEletronico = pontoEletronico;
+	}
+
+	/**
+	 * @return the pontoEletronicoConfig
+	 */
+	public PontoEletronicoConfig getPontoEletronicoConfig() {
+		return pontoEletronicoConfig;
+	}
+
+	/**
+	 * @param pontoEletronicoConfig the pontoEletronicoConfig to set
+	 */
+	public void setPontoEletronicoConfig(PontoEletronicoConfig pontoEletronicoConfig) {
+		this.pontoEletronicoConfig = pontoEletronicoConfig;
+	}
 }

@@ -12,6 +12,8 @@ import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.mtec.pontoeletronico.configuracao.domain.FeriadosPontes;
+import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
 import org.mtec.pontoeletronico.domain.Apontamento;
 import org.mtec.pontoeletronico.domain.Mes;
 import org.mtec.pontoeletronico.domain.Periodo;
@@ -30,6 +32,7 @@ public class PontoEletronicoServiceTest {
 	private static final Logger log = Logger.getLogger(PontoEletronicoServiceTest.class);
 
 	private PontoEletronico pontoEletronico;
+	private PontoEletronicoConfig pontoEletronicoConfig;
 	
 	/**
 	 * @throws java.lang.Exception
@@ -93,6 +96,29 @@ public class PontoEletronicoServiceTest {
 			periodoArray2[0].setSaida(new Date());
 			
 			apontamento2.setPeriodos(periodoArray2);
+			
+			pontoEletronicoConfig = new PontoEletronicoConfig();
+			pontoEletronicoConfig.setNomeUsuario("Maciel Escudero Bombonato");
+			pontoEletronicoConfig.setNomeAprovador("Meiry Ane Agnese");
+			pontoEletronicoConfig.setQtdHorasAlmoco(1.5D);
+			pontoEletronicoConfig.setQtdHorasTrabalhoDiario(9.5D);
+			
+			HashMap<String, FeriadosPontes> feriadosMap = new HashMap<String, FeriadosPontes>();
+			FeriadosPontes feriadoFixo = new FeriadosPontes();
+			feriadoFixo.setDataFeriado("15/07");
+			feriadoFixo.setNomeFeriado("TESTE");
+			feriadosMap.put(feriadoFixo.getDataFeriado(), feriadoFixo);
+			
+			HashMap<String, FeriadosPontes> feriadosVariaveisMap = new HashMap<String, FeriadosPontes>();
+			FeriadosPontes feriadoVariavel = new FeriadosPontes();
+			feriadoVariavel.setDataFeriado("18/07/2009");
+			feriadoVariavel.setNomeFeriado("TESTE");
+			feriadosVariaveisMap.put(feriadoVariavel.getDataFeriado(), feriadoVariavel);
+			
+			pontoEletronicoConfig.setFeriadosFixos(feriadosMap);
+			
+			pontoEletronicoConfig.setFeriadosPontesVariaveis(feriadosVariaveisMap);
+			
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
@@ -111,18 +137,29 @@ public class PontoEletronicoServiceTest {
 	@Test
 	public void testMarcarPonto() {
 		PontoEletronicoService pontoEletronicoService = new PontoEletronicoServiceImpl();
+		pontoEletronicoService.setPontoEletronico(pontoEletronico);
+		pontoEletronicoService.setPontoEletronicoConfig(pontoEletronicoConfig);
 		pontoEletronicoService.marcarPonto(false);
 		
 		XStream xstream = pontoEletronicoService.getPontoEletronicoSchema();
 		
 		String xml = xstream.toXML(pontoEletronico);
 		
+		XStream xstreamConfig = pontoEletronicoService.getPontoEletronicoConfigSchema();
+		
+		String xmlConfig = xstreamConfig.toXML(pontoEletronicoConfig);
+		
 		assertTrue(pontoEletronico != null);
 		assertTrue(pontoEletronico.getQtdHorasTrabalhadas() == 1D);
 		assertNotNull(xml);
 		assertFalse(xml.equalsIgnoreCase(""));
 		
+		assertNotNull(xmlConfig);
+		assertFalse(xmlConfig.equalsIgnoreCase(""));
+		
 		log.info(xml);
+		
+		log.info(xmlConfig);
 		
 		PontoEletronico ponto = (PontoEletronico)xstream.fromXML(xml);
 		

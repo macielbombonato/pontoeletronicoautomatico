@@ -6,6 +6,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import org.apache.log4j.Logger;
 
+import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
 import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
 /**
@@ -27,8 +28,9 @@ public final class PontoEletronico {
 	
 	/**
 	 * Gera ou mantem o arquivo de ponto eletronico do usuario corrente.
+	 * @param pontoEletronicoConfig
 	 */
-	public void gerarPontoEletronico() {
+	public void gerarPontoEletronico(PontoEletronicoConfig pontoEletronicoConfig) {
 		log.info("Gerando ponto eletronico.");
 		
 		Mes mes = null;
@@ -45,25 +47,26 @@ public final class PontoEletronico {
 			this.setMesesApontamento(new HashMap<String, Mes>());
 		}
 		
-		if (this.getMesesApontamento().size() > 0
-		&& this.getMesesApontamento().get(PontoEletronicoUtil.formatDate(mesAtual.getTime(), PontoEletronicoUtil.PATTERN_MMM_YYYY)) != null) {
-    		mes = (Mes) this.getMesesApontamento().get(
-    				PontoEletronicoUtil.formatDate(
-	        				mesAtual.getTime(), 
-	        				PontoEletronicoUtil.PATTERN_MMM_YYYY
-	        			)
-    			);
-   		} else {
+		mes = (Mes) this.getMesesApontamento().get(
+				PontoEletronicoUtil.formatDate(
+        				mesAtual.getTime(), 
+        				PontoEletronicoUtil.PATTERN_MMM_YYYY
+        			).toUpperCase()
+			);
+		
+		if (mes == null) {
 			mes = new Mes();
+			
+			mes.montarMesApontamento(pontoEletronicoConfig);
 			
 			mes.setMesApontamento(
 	        		PontoEletronicoUtil.formatDate(
 	        				mesAtual.getTime(), 
 	        				PontoEletronicoUtil.PATTERN_MMM_YYYY
-	        			)
+	        			).toUpperCase()
 	        	);
 			
-			this.getMesesApontamento().put(mes.getMesApontamento(), mes);
+			this.getMesesApontamento().put(mes.getMesApontamento().toUpperCase(), mes);
 		}
 		
 		mes.gerarMesApontamento(this);
