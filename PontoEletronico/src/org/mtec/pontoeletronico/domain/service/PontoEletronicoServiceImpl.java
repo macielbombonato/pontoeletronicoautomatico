@@ -8,9 +8,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
+import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.domain.Apontamento;
 import org.mtec.pontoeletronico.domain.Mes;
 import org.mtec.pontoeletronico.domain.Periodo;
@@ -25,7 +24,7 @@ import com.thoughtworks.xstream.XStream;
  */
 public final class PontoEletronicoServiceImpl implements PontoEletronicoService {
 	
-	private static Logger log = Logger.getLogger(PontoEletronicoServiceImpl.class.getName());
+	private static final Logger log = Logger.getLogger(PontoEletronicoServiceImpl.class);
 	
 	private final String DIRETORIO = System.getProperty("user.home") + "/pontoeletronico";
 	private static String NOME_ARQUIVO;
@@ -34,7 +33,7 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
     	try {
 			NOME_ARQUIVO = InetAddress.getLocalHost().getHostName() + "_" + System.getProperty("user.name") + ".xml";
 		} catch (UnknownHostException e) {
-			log.log(Level.SEVERE, "Erro ao montar o nome do arquivo.", e);
+			log.error("Erro ao montar o nome do arquivo.", e);
 			e.printStackTrace();
 		}
     }
@@ -61,7 +60,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
                     
                     pontoEletronico.setNomeComputador(InetAddress.getLocalHost().getHostName());
 
-//                    TODO gerarMesApontamento(pontoEletronicoXml);
                     pontoEletronico.gerarPontoEletronico();
                 }
 
@@ -75,12 +73,10 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
             		continuar = false;
             	}
             }
-        } catch (InterruptedException ex) {
-            log.log(Level.SEVERE, "Erro de manipulacao de arquivo.", ex);
-            ex.printStackTrace();
-        } catch (IOException ex) {
-        	log.log(Level.SEVERE, "Erro de manipulacao de arquivo.", ex);
-            ex.printStackTrace();
+        } catch (InterruptedException e) {
+            log.error("Erro de manipulacao de arquivo.", e);
+        } catch (IOException e) {
+        	log.error("Erro de manipulacao de arquivo.", e);
         } finally {
         	log.info("Fim do processo de marcacao de ponto.");	
         }
@@ -92,7 +88,7 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
      * @throws IOException
      */
     private PontoEletronico obterArquivoMarcacao() throws IOException {
-        log.log(Level.INFO, "Obtendo arquivo de marcacao de ponto.");
+        log.info("Obtendo arquivo de marcacao de ponto.");
         
         PontoEletronico arquivoPontoEletronico = null;
         
@@ -138,7 +134,7 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
      * @throws FileNotFoundException
      */
     private void salvarArquivoPonto(PontoEletronico pontoEletronico) throws IOException, FileNotFoundException {
-        log.log(Level.INFO, "Salvando arquivo de marcacao de ponto.");
+        log.info("Salvando arquivo de marcacao de ponto.");
 
         File arquivoMarcacao = new File(DIRETORIO + "/" + NOME_ARQUIVO);
         
