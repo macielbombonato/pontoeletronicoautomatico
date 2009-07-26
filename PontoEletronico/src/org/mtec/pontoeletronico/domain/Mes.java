@@ -4,17 +4,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
 /**
- * @author Maciel Escudero Bombonato
+ * @author Maciel Escudero Bombonato - maciel.bombonato@gmail.com
  */
 public final class Mes {
 	
-	private static Logger log = Logger.getLogger(Mes.class.getName());
+	private static final Logger log = Logger.getLogger(Mes.class);
 	
 	private String mesApontamento;
 	
@@ -25,10 +26,10 @@ public final class Mes {
 	private HashMap<String, Apontamento> apontamentos;
 	
     /**
-     * Gera um mes de apontamento.
+     * Gera ou mantem um mes de apontamento.
      */
     public void gerarMesApontamento(PontoEletronico pontoEletronico) {
-    	log.log(Level.INFO, "Gerando mes de apontamento.");
+    	log.info("Gerando mes de apontamento.");
 		
 		Apontamento apontamento = null;
 		
@@ -59,13 +60,57 @@ public final class Mes {
 			this.getApontamentos().put(key, apontamento);
 		}
 		
-//		try {
-//			apontamento.gerarApontamento(this);
-//		} catch (UnknownHostException e) {
-//			log.log(Level.SEVERE, "Erro de manipulacao de arquivo.", e);
-//            e.printStackTrace();
-//		}
+		apontamento.gerarApontamento();
+
+		calcularQuantidadeHorasTrabalhadasMes();
+		
+		reCalcularQuantidadeHorasTrabalhadasApontamentos();
     }
+    
+	/**
+	 * Calcula a quantidade de horas trabalhadas em um mes de apontamento.
+	 */
+	private void calcularQuantidadeHorasTrabalhadasMes() {
+		
+		this.setQtdHorasTrabalhadas(0D);
+		
+		if (this.getApontamentos() != null
+		&& this.getApontamentos().size() > 0) {
+			for (Iterator<Entry<String, Apontamento>> iterator = this.getApontamentos().entrySet().iterator(); iterator.hasNext();) {
+				Entry<String, Apontamento> entry = iterator.next();
+				
+				Apontamento apontamento = entry.getValue();
+
+				if (apontamento.getPeriodos() != null
+				&& apontamento.getPeriodos().length > 0) {
+					for (int i = 0; i < apontamento.getPeriodos().length; i++) {
+						this.setQtdHorasTrabalhadas(
+								this.getQtdHorasTrabalhadas() + 
+								(apontamento.getPeriodos()[i].getSaida().getTime() - apontamento.getPeriodos()[i].getEntrada().getTime())
+							);
+					}	
+				}
+			}
+			
+			this.setQtdHorasTrabalhadas(((this.getQtdHorasTrabalhadas() / 1000) / 60) / 60);
+		}
+	}
+	
+	/**
+	 * Recalcula a quantidade de horas trabalhadas nos apontamentos.
+	 */
+	private void reCalcularQuantidadeHorasTrabalhadasApontamentos() {
+		if (this.getApontamentos() != null
+		&& this.getApontamentos().size() > 0) {
+			for (Iterator<Entry<String, Apontamento>> iterator = this.getApontamentos().entrySet().iterator(); iterator.hasNext();) {
+				Entry<String, Apontamento> entry = iterator.next();
+				
+				Apontamento apontamento = entry.getValue();
+				
+				apontamento.calcularQuantidadeHorasTrabalhadasApontamento();
+			}
+		}
+	}
 	
 	/**
 	 * @return the mesApontamento
