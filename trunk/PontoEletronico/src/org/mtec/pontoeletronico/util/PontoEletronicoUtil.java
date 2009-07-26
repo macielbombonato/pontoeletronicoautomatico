@@ -12,67 +12,72 @@ import java.util.Locale;
 public final class PontoEletronicoUtil {
 	
 	/**
-	 * Mascara de formata��o de data: dd/MM/yyyy
+	 * Mascara de formatacao de data: dd/MM/yyyy
 	 */
 	public static final String PATTERN_DD_MM_YYYY = "dd/MM/yyyy";
 	
 	/**
-	 * Mascara de formata��o de data: ddMMyyyy
+	 * Mascara de formatacao de data: dd/MM
+	 */
+	public static final String PATTERN_DD_MM = "dd/MM";
+	
+	/**
+	 * Mascara de formatacao de data: ddMMyyyy
 	 */
 	public static final String PATTERN_DDMMYYYY = "ddMMyyyy";
 	
 	/**
-	 * Mascara de formata��o de data: MMM/yyyy
+	 * Mascara de formatacao de data: MMM/yyyy
 	 */
 	public static final String PATTERN_MMM_YYYY = "MMM/yyyy";
 	
 	/**
-	 * Mascara de formata��o de data: MMM/yyyy
+	 * Mascara de formatacao de data: MMM/yyyy
 	 */
 	public static final String PATTERN_MMM_YY = "MMM/yy";
 	
 	/**
-	 * Mascara de formata��o de data: dd/MMM/yyyy
+	 * Mascara de formatacao de data: dd/MMM/yyyy
 	 */
 	public static final String PATTERN_DD_MMM_YYYY = "dd/MMM/yyyy";
 	
 	/**
-	 * Mascara de formata��o de data: MMyyyy
+	 * Mascara de formatacao de data: MMyyyy
 	 */
 	public static final String PATTERN_MMYYYY = "MMyyyy";
 	
 	/**
-	 * Mascara de formata��o de data: MMDDyyyy
+	 * Mascara de formatacao de data: MMDDyyyy
 	 */
 	public static final String PATTERN_MMDDYYYY = "MMDDyyyy";
 	
 	/**
-	 * Mascara de formata��o de data e hora: dd/MM/yyyy HH:mm
+	 * Mascara de formatacao de data e hora: dd/MM/yyyy HH:mm
 	 */
 	public static final String PATTERN_DD_MM_YYYY_HH_MM = "dd/MM/yyyy HH:mm";
 	
 	/**
-	 * Mascara de formata��o de data e hora: dd/MM/yyyy HH:mm:ss
+	 * Mascara de formatacao de data e hora: dd/MM/yyyy HH:mm:ss
 	 */
 	public static final String PATTERN_DD_MM_YYYY_HH_MM_SS = "dd/MM/yyyy HH:mm:ss";
 
 	/**
-	 * Mascara de formata��o de data e hora: ddMMyyyy HHmmss
+	 * Mascara de formatacao de data e hora: ddMMyyyy HHmmss
 	 */
 	public static final String PATTERN_DDMMYYYY_HHMMSS = "ddMMyyyy HHmmss";	
 	
 	/**
-	 * Mascara de formata��o de hora: HH:mm:ss
+	 * Mascara de formatacao de hora: HH:mm:ss
 	 */
 	public static final String PATTERN_HH_MM_SS = "HH:mm:ss";
 	
 	/**
-	 * Mascara de formata��o de hora: HHmmss
+	 * Mascara de formatacao de hora: HHmmss
 	 */
 	public static final String PATTERN_HHMMSS = "HHmmss";	
 
 	/**
-	 * Recebe um objeto do tipo java.util.Date e retorna uma String no formato definido via par�metro
+	 * Recebe um objeto do tipo java.util.Date e retorna uma String no formato definido via parametro
 	 * @param value - java.util.Date (Data que devera ser formatada)
 	 * @param pattern - Mascara de formatacao da Data, por exemplo, dd/MM/yyyy, ou dd/MMM/yyyy, ...
 	 * @return String

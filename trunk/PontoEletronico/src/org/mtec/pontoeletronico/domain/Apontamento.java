@@ -49,19 +49,20 @@ public final class Apontamento {
 	 * Calcula a quantidade de horas trabalhadas em um dia de apontamento.
 	 */
 	public void calcularQuantidadeHorasTrabalhadasApontamento() {
-		this.setQtdHorasTrabalhadas(0D);
-		
 		if (this.getPeriodos() != null
 		&& this.getPeriodos().length > 0) {
+
+			this.setQtdHorasTrabalhadas(0D);
+			
 			for (int i = 0; i < this.getPeriodos().length; i++) {
 				this.setQtdHorasTrabalhadas(
 						this.getQtdHorasTrabalhadas() + 
 						(this.getPeriodos()[i].getSaida().getTime() - this.getPeriodos()[i].getEntrada().getTime())
 					);
 			}	
+			
+			this.setQtdHorasTrabalhadas(((this.getQtdHorasTrabalhadas() / 1000) / 60) / 60);
 		}
-		
-		this.setQtdHorasTrabalhadas(((this.getQtdHorasTrabalhadas() / 1000) / 60) / 60);
 	}
 
 	/**

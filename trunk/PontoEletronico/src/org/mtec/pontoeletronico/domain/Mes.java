@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
+import org.mtec.pontoeletronico.configuracao.domain.FeriadosPontes;
+import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
 import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
 /**
@@ -111,6 +113,73 @@ public final class Mes {
 			}
 		}
 	}
+	
+    /**
+     * Montar um mes de apontamento considerando apenas os dias uteis.
+     */
+    public void montarMesApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
+    	log.info("Montando um mes de apontamento.");
+		
+		Calendar ultimoDiaCalendar = GregorianCalendar.getInstance();
+		ultimoDiaCalendar.setTime(new Date());
+		ultimoDiaCalendar.set(Calendar.DAY_OF_MONTH, 1);
+		ultimoDiaCalendar.set(Calendar.HOUR_OF_DAY, 0);
+		ultimoDiaCalendar.set(Calendar.MINUTE, 0);
+		ultimoDiaCalendar.set(Calendar.SECOND, 0);
+		ultimoDiaCalendar.set(Calendar.MILLISECOND, 0);
+		ultimoDiaCalendar.add(Calendar.MONTH, 1);
+		ultimoDiaCalendar.add(Calendar.DAY_OF_MONTH, -1);
+		
+    	Calendar data = GregorianCalendar.getInstance();
+    	data.setTime(new Date());
+    	data.set(Calendar.HOUR_OF_DAY, 0);
+    	data.set(Calendar.MINUTE, 0);
+    	data.set(Calendar.SECOND, 0);
+    	data.set(Calendar.MILLISECOND, 0);
+
+		String key = "";
+		String keyFeriadoFixo = "";
+		FeriadosPontes feriadoFixo = null;
+		FeriadosPontes feriadoPonteVariavel = null;
+		
+		if (this.getApontamentos() == null) {
+			this.setApontamentos(new HashMap<String, Apontamento>());
+		}
+		
+		for (int i = 1; i < ultimoDiaCalendar.get(Calendar.DAY_OF_MONTH); i++) {
+			data.set(Calendar.DAY_OF_MONTH, i);
+			
+			key = PontoEletronicoUtil.formatDate(
+					data.getTime(), 
+					PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+				);
+			
+			keyFeriadoFixo = PontoEletronicoUtil.formatDate(
+					data.getTime(), 
+					PontoEletronicoUtil.PATTERN_DD_MM
+				);
+			
+			if (pontoEletronicoConfig != null) {
+				if (pontoEletronicoConfig.getFeriadosFixos() != null) {
+					feriadoFixo = pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo);	
+				}
+				if (pontoEletronicoConfig.getFeriadosPontesVariaveis() != null) {
+					feriadoPonteVariavel = pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key);	
+				}
+			}
+			
+			if (data.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+			&& data.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+			&& feriadoFixo == null
+			&& feriadoPonteVariavel == null) {
+				Apontamento apontamento = new Apontamento();
+				
+				apontamento.setDataApontamento(data.getTime());
+				
+				this.getApontamentos().put(key, apontamento);				
+			}
+		}
+    }
 	
 	/**
 	 * @return the mesApontamento
