@@ -2,8 +2,12 @@ package org.mtec.pontoeletronico.domain;
 
 import java.util.Date;
 
+/**
+ * @author Maciel Escudero Bombonato - maciel.bombonato@gmail.com
+ *
+ */
 public final class Periodo {
-	
+
 	private Date entrada;
 	
 	private Date saida;
