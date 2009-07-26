@@ -4,17 +4,16 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import org.apache.log4j.Logger;
 
 import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
 /**
- * @author Maciel Escudero Bombonato
+ * @author Maciel Escudero Bombonato - maciel.bombonato@gmail.com
  */
 public final class PontoEletronico {
 	
-	private static Logger log = Logger.getLogger(PontoEletronico.class.getName());
+	private static final Logger log = Logger.getLogger(PontoEletronico.class);
 	
 	private String nomeUsuario;
 	
@@ -27,10 +26,10 @@ public final class PontoEletronico {
 	private HashMap<String, Mes> mesesApontamento;
 	
 	/**
-	 * Gera ponto eletronico do usuario corrente.
+	 * Gera ou mantem o arquivo de ponto eletronico do usuario corrente.
 	 */
 	public void gerarPontoEletronico() {
-		log.log(Level.INFO, "Gerando ponto eletronico.");
+		log.info("Gerando ponto eletronico.");
 		
 		Mes mes = null;
 		
