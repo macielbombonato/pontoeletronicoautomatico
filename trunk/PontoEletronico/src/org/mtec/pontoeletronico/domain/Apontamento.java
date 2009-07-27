@@ -3,6 +3,8 @@ package org.mtec.pontoeletronico.domain;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
+import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
+import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
 /**
  * 
@@ -24,7 +26,7 @@ public final class Apontamento {
 	/**
 	 * Gera ou mantem um apontamento.
 	 */
-	public void gerarApontamento() {
+	public void gerarApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
     	log.info("Gerando apontamento.");
 		
 		Periodo periodo = null;
@@ -42,13 +44,13 @@ public final class Apontamento {
 		
 		periodo.setSaida(new Date());
 		
-		calcularQuantidadeHorasTrabalhadasApontamento();
+		calcularQuantidadeHorasTrabalhadasApontamento(pontoEletronicoConfig);
 	}
 	
 	/**
 	 * Calcula a quantidade de horas trabalhadas em um dia de apontamento.
 	 */
-	public void calcularQuantidadeHorasTrabalhadasApontamento() {
+	public void calcularQuantidadeHorasTrabalhadasApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
 		if (this.getPeriodos() != null
 		&& this.getPeriodos().length > 0) {
 
@@ -62,6 +64,26 @@ public final class Apontamento {
 			}	
 			
 			this.setQtdHorasTrabalhadas(((this.getQtdHorasTrabalhadas() / 1000) / 60) / 60);
+			
+			String key = PontoEletronicoUtil.formatDate(
+					this.getDataApontamento(), 
+					PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+				);
+			
+			String keyFeriadoFixo = PontoEletronicoUtil.formatDate(
+					this.getDataApontamento(),
+					PontoEletronicoUtil.PATTERN_DD_MM
+				);
+			
+			if (pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
+			&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
+				this.setSaldoBancoHoras(
+						this.getQtdHorasTrabalhadas() - 
+						(pontoEletronicoConfig.getQtdHorasTrabalhoDiario() + pontoEletronicoConfig.getQtdHorasAlmoco())
+					);
+			} else {
+				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+			}
 		}
 	}
 

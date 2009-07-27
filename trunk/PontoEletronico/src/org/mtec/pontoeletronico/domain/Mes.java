@@ -30,7 +30,7 @@ public final class Mes {
     /**
      * Gera ou mantem um mes de apontamento.
      */
-    public void gerarMesApontamento(PontoEletronico pontoEletronico) {
+    public void gerarMesApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
     	log.info("Gerando mes de apontamento.");
 		
 		Apontamento apontamento = null;
@@ -62,26 +62,34 @@ public final class Mes {
 			this.getApontamentos().put(key, apontamento);
 		}
 		
-		apontamento.gerarApontamento();
+		apontamento.gerarApontamento(pontoEletronicoConfig);
 
 		calcularQuantidadeHorasTrabalhadasMes();
 		
-		reCalcularQuantidadeHorasTrabalhadasApontamentos();
+		reCalcularQuantidadeHorasTrabalhadasApontamentos(pontoEletronicoConfig);
     }
     
 	/**
 	 * Calcula a quantidade de horas trabalhadas em um mes de apontamento.
 	 */
 	private void calcularQuantidadeHorasTrabalhadasMes() {
-		
-		this.setQtdHorasTrabalhadas(0D);
-		
+
 		if (this.getApontamentos() != null
 		&& this.getApontamentos().size() > 0) {
+			this.setQtdHorasTrabalhadas(0D);
+			this.setSaldoBancoHoras(0D);
+			
 			for (Iterator<Entry<String, Apontamento>> iterator = this.getApontamentos().entrySet().iterator(); iterator.hasNext();) {
 				Entry<String, Apontamento> entry = iterator.next();
 				
 				Apontamento apontamento = entry.getValue();
+				
+				if (apontamento.getSaldoBancoHoras() != null) {
+					this.setSaldoBancoHoras(
+							this.getSaldoBancoHoras() + 
+							apontamento.getSaldoBancoHoras()
+						);	
+				}
 
 				if (apontamento.getPeriodos() != null
 				&& apontamento.getPeriodos().length > 0) {
@@ -101,7 +109,7 @@ public final class Mes {
 	/**
 	 * Recalcula a quantidade de horas trabalhadas nos apontamentos.
 	 */
-	private void reCalcularQuantidadeHorasTrabalhadasApontamentos() {
+	private void reCalcularQuantidadeHorasTrabalhadasApontamentos(PontoEletronicoConfig pontoEletronicoConfig) {
 		if (this.getApontamentos() != null
 		&& this.getApontamentos().size() > 0) {
 			for (Iterator<Entry<String, Apontamento>> iterator = this.getApontamentos().entrySet().iterator(); iterator.hasNext();) {
@@ -109,7 +117,7 @@ public final class Mes {
 				
 				Apontamento apontamento = entry.getValue();
 				
-				apontamento.calcularQuantidadeHorasTrabalhadasApontamento();
+				apontamento.calcularQuantidadeHorasTrabalhadasApontamento(pontoEletronicoConfig);
 			}
 		}
 	}
@@ -120,7 +128,14 @@ public final class Mes {
     public void montarMesApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
     	log.info("Montando um mes de apontamento.");
 		
-		Calendar ultimoDiaCalendar = GregorianCalendar.getInstance();
+		Calendar hoje = GregorianCalendar.getInstance();
+		hoje.setTime(new Date());
+		hoje.set(Calendar.HOUR_OF_DAY, 0);
+		hoje.set(Calendar.MINUTE, 0);
+		hoje.set(Calendar.SECOND, 0);
+		hoje.set(Calendar.MILLISECOND, 0);
+    	
+    	Calendar ultimoDiaCalendar = GregorianCalendar.getInstance();
 		ultimoDiaCalendar.setTime(new Date());
 		ultimoDiaCalendar.set(Calendar.DAY_OF_MONTH, 1);
 		ultimoDiaCalendar.set(Calendar.HOUR_OF_DAY, 0);
@@ -173,6 +188,10 @@ public final class Mes {
 			&& feriadoFixo == null
 			&& feriadoPonteVariavel == null) {
 				Apontamento apontamento = new Apontamento();
+				
+				if (data.get(Calendar.DAY_OF_MONTH) < hoje.get(Calendar.DAY_OF_MONTH)) {
+					apontamento.setSaldoBancoHoras(pontoEletronicoConfig.getQtdHorasTrabalhoDiario() * -1);
+				}
 				
 				apontamento.setDataApontamento(data.getTime());
 				
