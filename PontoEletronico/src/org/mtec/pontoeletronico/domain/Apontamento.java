@@ -86,7 +86,9 @@ public final class Apontamento {
 				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
 			} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
 				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
-			} else if (pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
+			} else if (pontoEletronicoConfig.getFeriadosFixos() != null
+			&& pontoEletronicoConfig.getFeriadosPontesVariaveis() != null
+			&& pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
 			&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
 				this.setSaldoBancoHoras(
 						this.getQtdHorasTrabalhadas() - 
