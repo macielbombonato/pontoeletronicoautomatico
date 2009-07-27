@@ -69,7 +69,7 @@ public final class PontoEletronico {
 			this.getMesesApontamento().put(mes.getMesApontamento().toUpperCase(), mes);
 		}
 		
-		mes.gerarMesApontamento(this);
+		mes.gerarMesApontamento(pontoEletronicoConfig);
 	}
 	
 	/**
