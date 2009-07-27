@@ -183,10 +183,43 @@ public final class Mes {
 				}
 			}
 			
-			if (data.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
-			&& data.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
-			&& feriadoFixo == null
-			&& feriadoPonteVariavel == null) {
+			if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				Apontamento apontamento = new Apontamento();
+				
+				apontamento.setDataApontamento(data.getTime());
+				
+				apontamento.setObservacoes("Sabado");
+				
+				this.getApontamentos().put(key, apontamento);
+				
+			} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				Apontamento apontamento = new Apontamento();
+				
+				apontamento.setDataApontamento(data.getTime());
+				
+				apontamento.setObservacoes("Domingo");
+				
+				this.getApontamentos().put(key, apontamento);
+				
+			} else if (feriadoFixo != null) {
+				Apontamento apontamento = new Apontamento();
+				
+				apontamento.setDataApontamento(data.getTime());
+				
+				apontamento.setObservacoes(feriadoFixo.getNomeFeriado());
+				
+				this.getApontamentos().put(key, apontamento);
+				
+			} else if (feriadoPonteVariavel != null) {
+				Apontamento apontamento = new Apontamento();
+				
+				apontamento.setDataApontamento(data.getTime());
+				
+				apontamento.setObservacoes(feriadoPonteVariavel.getNomeFeriado());
+				
+				this.getApontamentos().put(key, apontamento);
+								
+			} else {
 				Apontamento apontamento = new Apontamento();
 				
 				if (data.get(Calendar.DAY_OF_MONTH) < hoje.get(Calendar.DAY_OF_MONTH)) {

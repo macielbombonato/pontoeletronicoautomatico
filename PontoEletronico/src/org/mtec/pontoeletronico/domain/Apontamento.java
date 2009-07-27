@@ -1,6 +1,8 @@
 package org.mtec.pontoeletronico.domain;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
@@ -21,6 +23,8 @@ public final class Apontamento {
 	
 	private Double saldoBancoHoras;
 	
+	private String observacoes;
+
 	private Periodo[] periodos;
 	
 	/**
@@ -51,6 +55,9 @@ public final class Apontamento {
 	 * Calcula a quantidade de horas trabalhadas em um dia de apontamento.
 	 */
 	public void calcularQuantidadeHorasTrabalhadasApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
+		Calendar data = GregorianCalendar.getInstance();
+		data.setTime(this.getDataApontamento());
+		
 		if (this.getPeriodos() != null
 		&& this.getPeriodos().length > 0) {
 
@@ -75,7 +82,11 @@ public final class Apontamento {
 					PontoEletronicoUtil.PATTERN_DD_MM
 				);
 			
-			if (pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
+			if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+			} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+			} else if (pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
 			&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
 				this.setSaldoBancoHoras(
 						this.getQtdHorasTrabalhadas() - 
@@ -142,5 +153,19 @@ public final class Apontamento {
 	public void setPeriodos(Periodo[] periodos) {
 		this.periodos = periodos;
 	}
+	
+	
+	/**
+	 * @return the observacoes
+	 */
+	public String getObservacoes() {
+		return observacoes;
+	}
 
+	/**
+	 * @param observacoes the observacoes to set
+	 */
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
+	}
 }
