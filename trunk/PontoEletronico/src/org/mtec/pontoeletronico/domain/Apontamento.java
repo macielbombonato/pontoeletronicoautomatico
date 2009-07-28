@@ -57,9 +57,11 @@ public final class Apontamento {
 				Calendar ultimoApontamento = GregorianCalendar.getInstance();
 				ultimoApontamento.setTime(periodo.getSaida());
 				
-				int qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
+				double qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
 				
-				if ((agora.get(Calendar.HOUR_OF_DAY) - ultimoApontamento.get(Calendar.HOUR_OF_DAY)) >= qtdHorasAlmoco) {
+				double difUltimoApontamento = ((((agora.getTimeInMillis() - ultimoApontamento.getTimeInMillis()) / 1000D) / 60D) / 60D) / 60D;
+				
+				if (difUltimoApontamento >= qtdHorasAlmoco) {
 					periodo = new Periodo();
 					
 					periodo.setEntrada(new Date());
