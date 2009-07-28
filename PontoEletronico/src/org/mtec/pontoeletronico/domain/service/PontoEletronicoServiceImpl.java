@@ -8,6 +8,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
@@ -41,7 +44,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 			NOME_ARQUIVO = InetAddress.getLocalHost().getHostName() + "_" + System.getProperty("user.name") + ".xml";
 		} catch (UnknownHostException e) {
 			log.error("Erro ao montar o nome do arquivo.", e);
-			e.printStackTrace();
 		}
     }
 	
@@ -55,26 +57,28 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
         	
         	PontoEletronicoConfig pontoEletronicoConfig = obterArquivoConfiguracao();
 
-            int contador = 0;
+        	Calendar agora = GregorianCalendar.getInstance();
             
             while (continuar) {
-                contador++;
+                
+                agora.setTime(new Date());
             	
-            	if (pontoEletronico != null) {
-            		pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
-                } else {
-                    pontoEletronico = new PontoEletronico();
-                    
-                    pontoEletronico.setNomeUsuario(pontoEletronicoConfig.getNomeUsuario());
-                    
-                    pontoEletronico.setNomeComputador(InetAddress.getLocalHost().getHostName());
+            	if (agora.get(Calendar.HOUR_OF_DAY) < pontoEletronicoConfig.getHoraInicioAlmoco()
+            	|| agora.get(Calendar.HOUR_OF_DAY) >= pontoEletronicoConfig.getHoraFimAlmoco()) {
+                	if (pontoEletronico != null) {
+                		pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
+                    } else {
+                        pontoEletronico = new PontoEletronico();
+                        
+                        pontoEletronico.setNomeUsuario(pontoEletronicoConfig.getNomeUsuario());
+                        
+                        pontoEletronico.setNomeComputador(InetAddress.getLocalHost().getHostName());
 
-                    pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
-                }
+                        pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
+                    }
 
-//                TODO contador = calcularHorasTrabalhadas(pontoEletronico, contador);
-            	
-            	salvarArquivoPonto(pontoEletronico);
+                	salvarArquivoPonto(pontoEletronico);            		
+            	}
                 
             	if (isDaemon) {
             		Thread.sleep(60000);
@@ -168,8 +172,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
     private PontoEletronicoConfig obterArquivoConfiguracao() throws IOException {
         log.info("Obtendo arquivo de configuracao do sistema de ponto eletronico.");
         
-        PontoEletronicoConfig arquivoPontoEletronicoConfig = null;
-        
         XStream xstream = getPontoEletronicoConfigSchema();
         
         File diretorioArquivo = new File(DIRETORIO);
@@ -181,7 +183,7 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
         File arquivoConfiguracao = new File(DIRETORIO + "/" + NOME_ARQUIVO_CONFIG);
         
         if (!arquivoConfiguracao.exists()
-        || arquivoConfiguracao.length() < 10L) {
+        || arquivoConfiguracao.length() < 20L) {
         	File diretorio = new File(DIRETORIO);
         	if (!diretorio.exists()) {
         		diretorio.mkdir();
@@ -189,7 +191,11 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
         	
         	arquivoConfiguracao.createNewFile();
             
-            arquivoPontoEletronicoConfig = new PontoEletronicoConfig();
+        	pontoEletronicoConfig = new PontoEletronicoConfig();
+            
+            pontoEletronicoConfig.gerarPontoEletronicoConfig();
+            
+            salvarArquivoConfiguracao(pontoEletronicoConfig);
         } else {
         	String xml = "";
         	FileReader reader = new FileReader(arquivoConfiguracao);
@@ -199,10 +205,34 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 				xml += linha;  
 			}  
 
-        	arquivoPontoEletronicoConfig = (PontoEletronicoConfig) xstream.fromXML(xml);	
+			pontoEletronicoConfig = (PontoEletronicoConfig) xstream.fromXML(xml);	
         }
 
-        return arquivoPontoEletronicoConfig;
+        return pontoEletronicoConfig;
+    }
+    
+    /**
+     * Salva arquivo de configuracao atualizado.
+     * @param pontoEletronicoConfig
+     * @throws IOException
+     * @throws FileNotFoundException
+     */
+    private void salvarArquivoConfiguracao(PontoEletronicoConfig pontoEletronicoConfig) throws IOException, FileNotFoundException {
+        log.info("Salvando arquivo de configuracao.");
+
+        File arquivoConfiguracao = new File(DIRETORIO + "/" + NOME_ARQUIVO_CONFIG);
+        
+        arquivoConfiguracao.delete();
+        
+        arquivoConfiguracao.createNewFile();
+        
+        FileOutputStream fos = new FileOutputStream(arquivoConfiguracao);
+        
+        XStream xstream = getPontoEletronicoConfigSchema();
+        
+        fos.write(xstream.toXML(pontoEletronicoConfig).getBytes());
+        
+        fos.close();
     }
     
 	/**
@@ -234,7 +264,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 		XStream xstream = new XStream();
 		
 		xstream.alias("PontoEletronicoConfig", PontoEletronicoConfig.class);
-		xstream.aliasField("meses", PontoEletronico.class, "mesesApontamento");
 		
 		return xstream;
 	}

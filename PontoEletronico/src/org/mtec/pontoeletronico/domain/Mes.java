@@ -64,9 +64,9 @@ public final class Mes {
 		
 		apontamento.gerarApontamento(pontoEletronicoConfig);
 
-		calcularQuantidadeHorasTrabalhadasMes();
-		
 		reCalcularQuantidadeHorasTrabalhadasApontamentos(pontoEletronicoConfig);
+		
+		calcularQuantidadeHorasTrabalhadasMes();
     }
     
 	/**
@@ -92,11 +92,11 @@ public final class Mes {
 				}
 
 				if (apontamento.getPeriodos() != null
-				&& apontamento.getPeriodos().length > 0) {
-					for (int i = 0; i < apontamento.getPeriodos().length; i++) {
+				&& apontamento.getPeriodos().size() > 0) {
+					for (int i = 0; i < apontamento.getPeriodos().size(); i++) {
 						this.setQtdHorasTrabalhadas(
 								this.getQtdHorasTrabalhadas() + 
-								(apontamento.getPeriodos()[i].getSaida().getTime() - apontamento.getPeriodos()[i].getEntrada().getTime())
+								(apontamento.getPeriodos().get(i).getSaida().getTime() - apontamento.getPeriodos().get(i).getEntrada().getTime())
 							);
 					}	
 				}

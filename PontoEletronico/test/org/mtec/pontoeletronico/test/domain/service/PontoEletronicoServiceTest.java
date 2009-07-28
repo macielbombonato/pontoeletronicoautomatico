@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -68,18 +69,19 @@ public class PontoEletronicoServiceTest {
 			
 			mes.setApontamentos(apontamentosMap);
 			
-			Periodo[] periodoArray = new Periodo[2];
-			periodoArray[0] = new Periodo();
-			periodoArray[0].setEntrada(new Date());
-			periodoArray[0].setSaida(new Date());
-			periodoArray[0].setObservacoes("Observacoes");
+			apontamento.setPeriodos(new ArrayList<Periodo>());
 			
-			periodoArray[1] = new Periodo();
-			periodoArray[1].setEntrada(new Date());
-			periodoArray[1].setSaida(new Date());
-			periodoArray[1].setObservacoes("Observacoes");
+			Periodo periodo1 = new Periodo();
+			periodo1.setEntrada(new Date());
+			periodo1.setSaida(new Date());
+			periodo1.setObservacoes("Observacoes");
+			apontamento.getPeriodos().add(periodo1);
 			
-			apontamento.setPeriodos(periodoArray);
+			Periodo periodo2 = new Periodo();
+			periodo2.setEntrada(new Date());
+			periodo2.setSaida(new Date());
+			periodo2.setObservacoes("Observacoes");
+			apontamento.getPeriodos().add(periodo2);
 			
 			Apontamento apontamento2 = new Apontamento();
 			apontamento2.setDataApontamento(new Date());
@@ -90,17 +92,18 @@ public class PontoEletronicoServiceTest {
 			
 			mes.setApontamentos(apontamentosMap);
 			
-			Periodo[] periodoArray2 = new Periodo[1];
-			periodoArray2[0] = new Periodo();
-			periodoArray2[0].setEntrada(new Date());
-			periodoArray2[0].setSaida(new Date());
+			apontamento2.setPeriodos(new ArrayList<Periodo>());
 			
-			apontamento2.setPeriodos(periodoArray2);
+			Periodo periodo3 = new Periodo();
+			periodo3 = new Periodo();
+			periodo3.setEntrada(new Date());
+			periodo3.setSaida(new Date());
+			
+			apontamento2.getPeriodos().add(periodo3);
 			
 			pontoEletronicoConfig = new PontoEletronicoConfig();
 			pontoEletronicoConfig.setNomeUsuario("Maciel Escudero Bombonato");
 			pontoEletronicoConfig.setNomeAprovador("Meiry Ane Agnese");
-			pontoEletronicoConfig.setQtdHorasAlmoco(1.5D);
 			pontoEletronicoConfig.setQtdHorasTrabalhoDiario(9.5D);
 			
 			HashMap<String, FeriadosPontes> feriadosMap = new HashMap<String, FeriadosPontes>();

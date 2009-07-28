@@ -1,8 +1,10 @@
 package org.mtec.pontoeletronico.domain;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
@@ -25,7 +27,7 @@ public final class Apontamento {
 	
 	private String observacoes;
 
-	private Periodo[] periodos;
+	private List<Periodo> periodos;
 	
 	/**
 	 * Gera ou mantem um apontamento.
@@ -33,17 +35,38 @@ public final class Apontamento {
 	public void gerarApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
     	log.info("Gerando apontamento.");
 		
-		Periodo periodo = null;
+    	Calendar agora = GregorianCalendar.getInstance();
+    	agora.setTime(new Date());
+    	
+    	Periodo periodo = null;
 		
 		if (this.getPeriodos() == null
-		|| this.getPeriodos().length == 0) {
+		|| this.getPeriodos().size() == 0) {
 			periodo = new Periodo();
 			
 			periodo.setEntrada(new Date());
 			
-			this.setPeriodos(new Periodo[]{periodo});
+			this.setPeriodos(new ArrayList<Periodo>());
+			
+			this.getPeriodos().add(periodo);
 		} else {
-			periodo = this.getPeriodos()[this.getPeriodos().length - 1];
+			periodo = this.getPeriodos().get(this.getPeriodos().size() - 1);
+			
+			if (periodo != null
+			&& periodo.getSaida() != null) {
+				Calendar ultimoApontamento = GregorianCalendar.getInstance();
+				ultimoApontamento.setTime(periodo.getSaida());
+				
+				int qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
+				
+				if ((agora.get(Calendar.HOUR_OF_DAY) - ultimoApontamento.get(Calendar.HOUR_OF_DAY)) >= qtdHorasAlmoco) {
+					periodo = new Periodo();
+					
+					periodo.setEntrada(new Date());
+					
+					this.getPeriodos().add(periodo);
+				}
+			}
 		}
 		
 		periodo.setSaida(new Date());
@@ -59,14 +82,14 @@ public final class Apontamento {
 		data.setTime(this.getDataApontamento());
 		
 		if (this.getPeriodos() != null
-		&& this.getPeriodos().length > 0) {
+		&& this.getPeriodos().size() > 0) {
 
 			this.setQtdHorasTrabalhadas(0D);
 			
-			for (int i = 0; i < this.getPeriodos().length; i++) {
+			for (int i = 0; i < this.getPeriodos().size(); i++) {
 				this.setQtdHorasTrabalhadas(
 						this.getQtdHorasTrabalhadas() + 
-						(this.getPeriodos()[i].getSaida().getTime() - this.getPeriodos()[i].getEntrada().getTime())
+						(this.getPeriodos().get(i).getSaida().getTime() - this.getPeriodos().get(i).getEntrada().getTime())
 					);
 			}	
 			
@@ -92,7 +115,7 @@ public final class Apontamento {
 			&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
 				this.setSaldoBancoHoras(
 						this.getQtdHorasTrabalhadas() - 
-						(pontoEletronicoConfig.getQtdHorasTrabalhoDiario() + pontoEletronicoConfig.getQtdHorasAlmoco())
+						pontoEletronicoConfig.getQtdHorasTrabalhoDiario()
 					);
 			} else {
 				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
@@ -145,14 +168,14 @@ public final class Apontamento {
 	/**
 	 * @return the periodo
 	 */
-	public Periodo[] getPeriodos() {
+	public List<Periodo> getPeriodos() {
 		return periodos;
 	}
 
 	/**
 	 * @param periodo the periodo to set
 	 */
-	public void setPeriodos(Periodo[] periodos) {
+	public void setPeriodos(List<Periodo> periodos) {
 		this.periodos = periodos;
 	}
 	
