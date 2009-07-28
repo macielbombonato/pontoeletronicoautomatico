@@ -61,28 +61,35 @@ public final class Mes {
 		}
 		
 		if (this.getApontamentos().size() > 0
-		&& this.getApontamentos().get(keyOld) != null) {
-    		apontamento = (Apontamento) this.getApontamentos().get(keyOld);
-    		
-    		if (apontamento.getPeriodos() != null
-    		&& apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1) != null) {
-    			Periodo periodo = apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1);
-    			
-    			Calendar saida = GregorianCalendar.getInstance();
-    			saida.setTime(periodo.getSaida());
-    			
-    			Calendar agora = GregorianCalendar.getInstance();
-    			agora.setTime(new Date());
-    			
-    			int qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
-    			
-    			if ((agora.get(Calendar.HOUR_OF_DAY) - saida.get(Calendar.HOUR_OF_DAY)) >= qtdHorasAlmoco) {
-    				hasUseKeyOld = false;
-    			} else {
-    				hasUseKeyOld = true;
-    			}
-    		}
-   		}
+		&& this.getApontamentos().get(key) != null
+		&& (this.getApontamentos().get(key).getPeriodos() == null
+		|| this.getApontamentos().get(key).getPeriodos().size() == 0)) {
+			if (this.getApontamentos().size() > 0
+			&& this.getApontamentos().get(keyOld) != null) {
+	    		apontamento = (Apontamento) this.getApontamentos().get(keyOld);
+	    		
+	    		if (apontamento.getPeriodos() != null
+	    		&& apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1) != null) {
+	    			Periodo periodo = apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1);
+	    			
+	    			Calendar saida = GregorianCalendar.getInstance();
+	    			saida.setTime(periodo.getSaida());
+	    			
+	    			Calendar agora = GregorianCalendar.getInstance();
+	    			agora.setTime(new Date());
+	    			
+	    			double qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
+	    			
+	    			double difUltimoApontamento = ((((agora.getTimeInMillis() - saida.getTimeInMillis()) / 1000D) / 60D) / 60D) / 60D;
+	    			
+	    			if (difUltimoApontamento >= qtdHorasAlmoco) {
+	    				hasUseKeyOld = false;
+	    			} else {
+	    				hasUseKeyOld = true;
+	    			}
+	    		}
+	   		}			
+		}
 		
 		if (this.getApontamentos().size() > 0
 		&& this.getApontamentos().get(key) != null

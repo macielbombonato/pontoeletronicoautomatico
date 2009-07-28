@@ -18,9 +18,9 @@ public class PontoEletronicoConfig {
 	
 	private double qtdHorasTrabalhoDiario;
 	
-	private int horaInicioAlmoco;
+	private double horaInicioAlmoco;
 	
-	private int horaFimAlmoco;
+	private double horaFimAlmoco;
 	
 	private TreeMap<String, FeriadosPontes> feriadosFixos;
 	
@@ -128,28 +128,28 @@ public class PontoEletronicoConfig {
 	/**
 	 * @return the horaInicioAlmoco
 	 */
-	public int getHoraInicioAlmoco() {
+	public double getHoraInicioAlmoco() {
 		return horaInicioAlmoco;
 	}
 
 	/**
 	 * @param horaInicioAlmoco the horaInicioAlmoco to set
 	 */
-	public void setHoraInicioAlmoco(int horaInicioAlmoco) {
+	public void setHoraInicioAlmoco(double horaInicioAlmoco) {
 		this.horaInicioAlmoco = horaInicioAlmoco;
 	}
 
 	/**
 	 * @return the horaFimAlmoco
 	 */
-	public int getHoraFimAlmoco() {
+	public double getHoraFimAlmoco() {
 		return horaFimAlmoco;
 	}
 
 	/**
 	 * @param horaFimAlmoco the horaFimAlmoco to set
 	 */
-	public void setHoraFimAlmoco(int horaFimAlmoco) {
+	public void setHoraFimAlmoco(double horaFimAlmoco) {
 		this.horaFimAlmoco = horaFimAlmoco;
 	}
 }
