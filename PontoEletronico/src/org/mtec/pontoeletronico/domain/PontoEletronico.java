@@ -5,9 +5,9 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import org.apache.log4j.Logger;
+import java.util.TreeMap;
 
+import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
 import org.mtec.pontoeletronico.util.PontoEletronicoUtil;
 
@@ -26,7 +26,7 @@ public final class PontoEletronico {
 	
 	private Double saldoBancoHoras;
 	
-	private HashMap<String, Mes> mesesApontamento;
+	private TreeMap<String, Mes> mesesApontamento;
 	
 	/**
 	 * Gera ou mantem o arquivo de ponto eletronico do usuario corrente.
@@ -53,7 +53,7 @@ public final class PontoEletronico {
 		mesAtual.set(Calendar.MILLISECOND, 0);
 		
 		if (this.getMesesApontamento() == null) {
-			this.setMesesApontamento(new HashMap<String, Mes>());
+			this.setMesesApontamento(new TreeMap<String, Mes>());
 		}
 		
 		mes = (Mes) this.getMesesApontamento().get(
@@ -140,14 +140,14 @@ public final class PontoEletronico {
 	/**
 	 * @return the mesApontamento
 	 */
-	public HashMap<String, Mes> getMesesApontamento() {
+	public TreeMap<String, Mes> getMesesApontamento() {
 		return mesesApontamento;
 	}
 
 	/**
 	 * @param mesApontamento the mesApontamento to set
 	 */
-	public void setMesesApontamento(HashMap<String, Mes> mesesApontamento) {
+	public void setMesesApontamento(TreeMap<String, Mes> mesesApontamento) {
 		this.mesesApontamento = mesesApontamento;
 	}
 

@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 import org.junit.After;
@@ -48,7 +48,7 @@ public class PontoEletronicoServiceTest {
 			pontoEletronico.setQtdHorasTrabalhadas(new Double(1D));
 			pontoEletronico.setSaldoBancoHoras(new Double(1D));
 			
-			HashMap<String, Mes> mesesMap = new HashMap<String, Mes>();
+			TreeMap<String, Mes> mesesMap = new TreeMap<String, Mes>();
 			Mes mes = new Mes();
 			mes.setMesApontamento("2009-01");
 			mes.setQtdHorasTrabalhadas(new Double(1D));
@@ -58,7 +58,7 @@ public class PontoEletronicoServiceTest {
 			
 			pontoEletronico.setMesesApontamento(mesesMap);
 
-			HashMap<String, Apontamento> apontamentosMap = new HashMap<String, Apontamento>();
+			TreeMap<String, Apontamento> apontamentosMap = new TreeMap<String, Apontamento>();
 			
 			Apontamento apontamento = new Apontamento();
 			apontamento.setDataApontamento(new Date());
@@ -106,13 +106,13 @@ public class PontoEletronicoServiceTest {
 			pontoEletronicoConfig.setNomeAprovador("Meiry Ane Agnese");
 			pontoEletronicoConfig.setQtdHorasTrabalhoDiario(9.5D);
 			
-			HashMap<String, FeriadosPontes> feriadosMap = new HashMap<String, FeriadosPontes>();
+			TreeMap<String, FeriadosPontes> feriadosMap = new TreeMap<String, FeriadosPontes>();
 			FeriadosPontes feriadoFixo = new FeriadosPontes();
 			feriadoFixo.setDataFeriado("15/07");
 			feriadoFixo.setNomeFeriado("TESTE");
 			feriadosMap.put(feriadoFixo.getDataFeriado(), feriadoFixo);
 			
-			HashMap<String, FeriadosPontes> feriadosVariaveisMap = new HashMap<String, FeriadosPontes>();
+			TreeMap<String, FeriadosPontes> feriadosVariaveisMap = new TreeMap<String, FeriadosPontes>();
 			FeriadosPontes feriadoVariavel = new FeriadosPontes();
 			feriadoVariavel.setDataFeriado("18/07/2009");
 			feriadoVariavel.setNomeFeriado("TESTE");

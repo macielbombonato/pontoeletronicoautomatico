@@ -1,6 +1,6 @@
 package org.mtec.pontoeletronico.configuracao.domain;
 
-import java.util.HashMap;
+import java.util.TreeMap;
 
 import org.apache.log4j.Logger;
 
@@ -22,9 +22,9 @@ public class PontoEletronicoConfig {
 	
 	private int horaFimAlmoco;
 	
-	private HashMap<String, FeriadosPontes> feriadosFixos;
+	private TreeMap<String, FeriadosPontes> feriadosFixos;
 	
-	private HashMap<String, FeriadosPontes> feriadosPontesVariaveis;
+	private TreeMap<String, FeriadosPontes> feriadosPontesVariaveis;
 	
 	/**
 	 * Gera ou mantem o arquivo de ponto eletronico do usuario corrente.
@@ -39,14 +39,19 @@ public class PontoEletronicoConfig {
 		this.setHoraInicioAlmoco(12);
 		this.setHoraFimAlmoco(13);
 		
-		this.setFeriadosFixos(new HashMap<String, FeriadosPontes>());
-		FeriadosPontes feriadoFixo = new FeriadosPontes();
-		feriadoFixo.setDataFeriado("01/12");
-		feriadoFixo.setNomeFeriado("Ano novo");
+		this.setFeriadosFixos(new TreeMap<String, FeriadosPontes>());
+
+		FeriadosPontes anoNovo = new FeriadosPontes();
+		anoNovo.setDataFeriado("01/01");
+		anoNovo.setNomeFeriado("Ano novo");
+		this.getFeriadosFixos().put(anoNovo.getDataFeriado(), anoNovo);
 		
-		this.getFeriadosFixos().put(feriadoFixo.getDataFeriado(), feriadoFixo);
+		FeriadosPontes natal = new FeriadosPontes();
+		natal.setDataFeriado("25/12");
+		natal.setNomeFeriado("Natal");
+		this.getFeriadosFixos().put(natal.getDataFeriado(), natal);
 		
-		this.setFeriadosPontesVariaveis(new HashMap<String, FeriadosPontes>());
+		this.setFeriadosPontesVariaveis(new TreeMap<String, FeriadosPontes>());
 	}
 
 	/**
@@ -94,21 +99,21 @@ public class PontoEletronicoConfig {
 	/**
 	 * @return the feriadosFixos
 	 */
-	public HashMap<String, FeriadosPontes> getFeriadosFixos() {
+	public TreeMap<String, FeriadosPontes> getFeriadosFixos() {
 		return feriadosFixos;
 	}
 
 	/**
 	 * @param feriadosFixos the feriadosFixos to set
 	 */
-	public void setFeriadosFixos(HashMap<String, FeriadosPontes> feriadosFixos) {
+	public void setFeriadosFixos(TreeMap<String, FeriadosPontes> feriadosFixos) {
 		this.feriadosFixos = feriadosFixos;
 	}
 
 	/**
 	 * @return the feriadosPontesVariaveis
 	 */
-	public HashMap<String, FeriadosPontes> getFeriadosPontesVariaveis() {
+	public TreeMap<String, FeriadosPontes> getFeriadosPontesVariaveis() {
 		return feriadosPontesVariaveis;
 	}
 
@@ -116,7 +121,7 @@ public class PontoEletronicoConfig {
 	 * @param feriadosPontesVariaveis the feriadosPontesVariaveis to set
 	 */
 	public void setFeriadosPontesVariaveis(
-			HashMap<String, FeriadosPontes> feriadosPontesVariaveis) {
+			TreeMap<String, FeriadosPontes> feriadosPontesVariaveis) {
 		this.feriadosPontesVariaveis = feriadosPontesVariaveis;
 	}
 
