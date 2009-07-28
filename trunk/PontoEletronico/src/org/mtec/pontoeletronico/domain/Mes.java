@@ -3,8 +3,8 @@ package org.mtec.pontoeletronico.domain;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
@@ -25,7 +25,7 @@ public final class Mes {
 	
 	private Double saldoBancoHoras;
 	
-	private HashMap<String, Apontamento> apontamentos;
+	private TreeMap<String, Apontamento> apontamentos;
 	
     /**
      * Gera ou mantem um mes de apontamento.
@@ -42,18 +42,56 @@ public final class Mes {
 		hoje.set(Calendar.SECOND, 0);
 		hoje.set(Calendar.MILLISECOND, 0);
 
+		hoje.add(Calendar.DAY_OF_MONTH, -1);
+		String keyOld = PontoEletronicoUtil.formatDate(
+				hoje.getTime(), 
+				PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+			);
+		
+		hoje.add(Calendar.DAY_OF_MONTH, 1);
 		String key = PontoEletronicoUtil.formatDate(
 				hoje.getTime(), 
 				PontoEletronicoUtil.PATTERN_DD_MM_YYYY
 			);
 		
+		boolean hasUseKeyOld = false;
+		
 		if (this.getApontamentos() == null) {
-			this.setApontamentos(new HashMap<String, Apontamento>());
+			this.setApontamentos(new TreeMap<String, Apontamento>());
 		}
 		
 		if (this.getApontamentos().size() > 0
-		&& this.getApontamentos().get(key) != null) {
+		&& this.getApontamentos().get(keyOld) != null) {
+    		apontamento = (Apontamento) this.getApontamentos().get(keyOld);
+    		
+    		if (apontamento.getPeriodos() != null
+    		&& apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1) != null) {
+    			Periodo periodo = apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1);
+    			
+    			Calendar saida = GregorianCalendar.getInstance();
+    			saida.setTime(periodo.getSaida());
+    			
+    			Calendar agora = GregorianCalendar.getInstance();
+    			agora.setTime(new Date());
+    			
+    			int qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
+    			
+    			if ((agora.get(Calendar.HOUR_OF_DAY) - saida.get(Calendar.HOUR_OF_DAY)) >= qtdHorasAlmoco) {
+    				hasUseKeyOld = false;
+    			} else {
+    				hasUseKeyOld = true;
+    			}
+    		}
+   		}
+		
+		if (this.getApontamentos().size() > 0
+		&& this.getApontamentos().get(key) != null
+		&& !hasUseKeyOld) {
     		apontamento = (Apontamento) this.getApontamentos().get(key);
+		} else if (this.getApontamentos().size() > 0
+		&& this.getApontamentos().get(key) != null
+		&& hasUseKeyOld) {
+			apontamento = (Apontamento) this.getApontamentos().get(keyOld);
    		} else {
 			apontamento = new Apontamento();
 			
@@ -158,7 +196,7 @@ public final class Mes {
 		FeriadosPontes feriadoPonteVariavel = null;
 		
 		if (this.getApontamentos() == null) {
-			this.setApontamentos(new HashMap<String, Apontamento>());
+			this.setApontamentos(new TreeMap<String, Apontamento>());
 		}
 		
 		for (int i = 1; i < ultimoDiaCalendar.get(Calendar.DAY_OF_MONTH); i++) {
@@ -278,14 +316,14 @@ public final class Mes {
 	/**
 	 * @return the apontamento
 	 */
-	public HashMap<String, Apontamento> getApontamentos() {
+	public TreeMap<String, Apontamento> getApontamentos() {
 		return apontamentos;
 	}
 
 	/**
 	 * @param apontamento the apontamento to set
 	 */
-	public void setApontamentos(HashMap<String, Apontamento> apontamentos) {
+	public void setApontamentos(TreeMap<String, Apontamento> apontamentos) {
 		this.apontamentos = apontamentos;
 	}
 
