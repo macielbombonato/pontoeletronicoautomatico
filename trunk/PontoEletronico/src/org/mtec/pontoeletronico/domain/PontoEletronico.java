@@ -1,5 +1,7 @@
 package org.mtec.pontoeletronico.domain;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -32,6 +34,13 @@ public final class PontoEletronico {
 	 */
 	public void gerarPontoEletronico(PontoEletronicoConfig pontoEletronicoConfig) {
 		log.info("Gerando ponto eletronico.");
+		
+		this.setNomeUsuario(pontoEletronicoConfig.getNomeUsuario());
+		try {
+			this.setNomeComputador(InetAddress.getLocalHost().getHostName());
+		} catch (UnknownHostException e) {
+			log.error("Erro ao obter o nome do computador.", e);
+		}
 		
 		Mes mes = null;
 		
