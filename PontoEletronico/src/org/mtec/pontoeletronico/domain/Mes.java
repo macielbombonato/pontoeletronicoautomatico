@@ -72,15 +72,9 @@ public final class Mes {
 	    		&& apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1) != null) {
 	    			Periodo periodo = apontamento.getPeriodos().get(apontamento.getPeriodos().size() - 1);
 	    			
-	    			Calendar saida = GregorianCalendar.getInstance();
-	    			saida.setTime(periodo.getSaida());
-	    			
-	    			Calendar agora = GregorianCalendar.getInstance();
-	    			agora.setTime(new Date());
-	    			
 	    			double qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
 	    			
-	    			double difUltimoApontamento = ((((agora.getTimeInMillis() - saida.getTimeInMillis()) / 1000D) / 60D) / 60D) / 60D;
+	    			double difUltimoApontamento = (((new Date().getTime() - periodo.getSaida().getTime()) / 1000D) / 60D) / 60D;
 	    			
 	    			if (difUltimoApontamento >= qtdHorasAlmoco) {
 	    				hasUseKeyOld = false;
