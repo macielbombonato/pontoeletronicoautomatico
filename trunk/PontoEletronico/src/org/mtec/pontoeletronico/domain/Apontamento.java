@@ -34,9 +34,6 @@ public final class Apontamento {
 	 */
 	public void gerarApontamento(PontoEletronicoConfig pontoEletronicoConfig) {
     	log.info("Gerando apontamento.");
-		
-    	Calendar agora = GregorianCalendar.getInstance();
-    	agora.setTime(new Date());
     	
     	Periodo periodo = null;
 		
@@ -54,12 +51,10 @@ public final class Apontamento {
 			
 			if (periodo != null
 			&& periodo.getSaida() != null) {
-				Calendar ultimoApontamento = GregorianCalendar.getInstance();
-				ultimoApontamento.setTime(periodo.getSaida());
 				
 				double qtdHorasAlmoco = pontoEletronicoConfig.getHoraFimAlmoco() - pontoEletronicoConfig.getHoraInicioAlmoco();
 				
-				double difUltimoApontamento = ((((agora.getTimeInMillis() - ultimoApontamento.getTimeInMillis()) / 1000D) / 60D) / 60D) / 60D;
+				double difUltimoApontamento = (((new Date().getTime() - periodo.getSaida().getTime()) / 1000D) / 60D) / 60D;
 				
 				if (difUltimoApontamento >= qtdHorasAlmoco) {
 					periodo = new Periodo();
