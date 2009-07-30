@@ -59,15 +59,12 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 
         	Calendar agora = GregorianCalendar.getInstance();
         	
-        	double horaAtual = 0D;
-            
             while (continuar) {
                 
                 agora.setTime(new Date());
-                horaAtual = (((agora.getTime().getTime()) / 1000D) / 60D) / 60D;
             	
-            	if (horaAtual < pontoEletronicoConfig.getHoraInicioAlmoco()
-            	|| horaAtual >= pontoEletronicoConfig.getHoraFimAlmoco()) {
+            	if (agora.get(Calendar.HOUR) < pontoEletronicoConfig.getHoraInicioAlmoco()
+            	|| agora.get(Calendar.HOUR) >= pontoEletronicoConfig.getHoraFimAlmoco()) {
                 	if (pontoEletronico != null) {
                 		pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
                     } else {
