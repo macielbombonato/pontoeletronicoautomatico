@@ -102,20 +102,27 @@ public final class Apontamento {
 					PontoEletronicoUtil.PATTERN_DD_MM
 				);
 			
-			if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
-			} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
-			} else if (pontoEletronicoConfig.getFeriadosFixos() != null
-			&& pontoEletronicoConfig.getFeriadosPontesVariaveis() != null
-			&& pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
-			&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
-				this.setSaldoBancoHoras(
-						this.getQtdHorasTrabalhadas() - 
-						pontoEletronicoConfig.getQtdHorasTrabalhoDiario()
-					);
-			} else {
-				this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+			String hoje = PontoEletronicoUtil.formatDate(
+					new Date(),
+					PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+				);
+			
+			if (!hoje.equalsIgnoreCase(key)) {
+				if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+					this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+				} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+					this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+				} else if (pontoEletronicoConfig.getFeriadosFixos() != null
+				&& pontoEletronicoConfig.getFeriadosPontesVariaveis() != null
+				&& pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
+				&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
+					this.setSaldoBancoHoras(
+							this.getQtdHorasTrabalhadas() - 
+							pontoEletronicoConfig.getQtdHorasTrabalhoDiario()
+						);
+				} else {
+					this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
+				}	
 			}
 		}
 	}
