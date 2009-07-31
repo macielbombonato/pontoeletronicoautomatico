@@ -63,8 +63,8 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
                 
                 agora.setTime(new Date());
             	
-            	if (agora.get(Calendar.HOUR) < pontoEletronicoConfig.getHoraInicioAlmoco()
-            	|| agora.get(Calendar.HOUR) >= pontoEletronicoConfig.getHoraFimAlmoco()) {
+            	if (agora.get(Calendar.HOUR_OF_DAY) < pontoEletronicoConfig.getHoraInicioAlmoco()
+            	|| agora.get(Calendar.HOUR_OF_DAY) >= pontoEletronicoConfig.getHoraFimAlmoco()) {
                 	if (pontoEletronico != null) {
                 		pontoEletronico.gerarPontoEletronico(pontoEletronicoConfig);
                     } else {
