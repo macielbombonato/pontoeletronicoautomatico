@@ -5,7 +5,9 @@ import java.net.UnknownHostException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
@@ -79,6 +81,40 @@ public final class PontoEletronico {
 		}
 		
 		mes.gerarMesApontamento(pontoEletronicoConfig);
+		
+		calcularQuantidadeTotalHorasTrabalhadas();
+	}
+	
+	/**
+	 * Calcula a quantidade total de horas trabalhadas registradas pelo sistema.
+	 */
+	private void calcularQuantidadeTotalHorasTrabalhadas() {
+
+		if (this.getMesesApontamento() != null
+		&& this.getMesesApontamento().size() > 0) {
+			this.setQtdHorasTrabalhadas(0D);
+			this.setSaldoBancoHoras(0D);
+			
+			for (Iterator<Entry<String, Mes>> iterator = this.getMesesApontamento().entrySet().iterator(); iterator.hasNext();) {
+				Entry<String, Mes> entry = iterator.next();
+				
+				Mes mes = entry.getValue();
+				
+				if (mes.getSaldoBancoHoras() != null) {
+					this.setSaldoBancoHoras(
+							this.getSaldoBancoHoras() + 
+							mes.getSaldoBancoHoras()
+						);	
+				}
+				
+				if (mes.getQtdHorasTrabalhadas() != null) {
+					this.setQtdHorasTrabalhadas(
+							this.getQtdHorasTrabalhadas() + 
+							mes.getQtdHorasTrabalhadas()
+						);	
+				}
+			}
+		}
 	}
 	
 	/**
