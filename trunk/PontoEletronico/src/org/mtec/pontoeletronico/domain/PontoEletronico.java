@@ -61,7 +61,7 @@ public final class PontoEletronico {
 		mes = (Mes) this.getMesesApontamento().get(
 				PontoEletronicoUtil.formatDate(
         				mesAtual.getTime(), 
-        				PontoEletronicoUtil.PATTERN_MMM_YYYY
+        				PontoEletronicoUtil.PATTERN_YYYY_MM
         			).toUpperCase()
 			);
 		
@@ -73,7 +73,7 @@ public final class PontoEletronico {
 			mes.setMesApontamento(
 	        		PontoEletronicoUtil.formatDate(
 	        				mesAtual.getTime(), 
-	        				PontoEletronicoUtil.PATTERN_MMM_YYYY
+	        				PontoEletronicoUtil.PATTERN_YYYY_MM
 	        			).toUpperCase()
 	        	);
 			
