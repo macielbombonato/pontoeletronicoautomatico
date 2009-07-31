@@ -28,6 +28,16 @@ public final class Main {
     	|| args[0].equalsIgnoreCase("marcarPonto")) {
             PontoEletronicoService service = new PontoEletronicoServiceImpl();
             service.marcarPonto(true);	
+    	} else if (args != null
+    	&& args.length == 1
+    	&& args[0].equalsIgnoreCase("gerarRelatorio")) {
+    		// TODO implementar
+    		System.out.println("TODO: Gerar relatorio.");
+    	} else if (args != null
+    	&& args.length == 2
+    	&& args[0].equalsIgnoreCase("gerarRelatorio")) {
+    		// TODO implementar
+    		System.out.println("TODO: Gerar relatorio mes referencia: " + args[1]);
     	} else {
     		log.info("Aplicacao nao foi inicializada corretamente.\n" +
     				"Utilize: \n" +
