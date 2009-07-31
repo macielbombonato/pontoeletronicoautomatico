@@ -32,6 +32,11 @@ public final class PontoEletronicoUtil {
 	public static final String PATTERN_MMM_YYYY = "MMM/yyyy";
 	
 	/**
+	 * Mascara de formatacao de data: yyyy-MM
+	 */
+	public static final String PATTERN_YYYY_MM = "yyyy-MM";
+	
+	/**
 	 * Mascara de formatacao de data: MMM/yyyy
 	 */
 	public static final String PATTERN_MMM_YY = "MMM/yy";
