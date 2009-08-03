@@ -22,6 +22,11 @@ public final class PontoEletronicoUtil {
 	public static final String PATTERN_DD_MM = "dd/MM";
 	
 	/**
+	 * Mascara de formatacao de data: dd
+	 */
+	public static final String PATTERN_DD = "dd";
+	
+	/**
 	 * Mascara de formatacao de data: ddMMyyyy
 	 */
 	public static final String PATTERN_DDMMYYYY = "ddMMyyyy";
@@ -79,7 +84,12 @@ public final class PontoEletronicoUtil {
 	/**
 	 * Mascara de formatacao de hora: HHmmss
 	 */
-	public static final String PATTERN_HHMMSS = "HHmmss";	
+	public static final String PATTERN_HHMMSS = "HHmmss";
+	
+	/**
+	 * Mascara de formatacao de hora: HH:mm
+	 */
+	public static final String PATTERN_HH_MM = "HH:mm";
 
 	/**
 	 * Recebe um objeto do tipo java.util.Date e retorna uma String no formato definido via parametro
