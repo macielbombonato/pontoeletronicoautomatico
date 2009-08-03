@@ -111,7 +111,7 @@ public final class Mes {
 	/**
 	 * Calcula a quantidade de horas trabalhadas em um mes de apontamento.
 	 */
-	private void calcularQuantidadeHorasTrabalhadasMes() {
+	public void calcularQuantidadeHorasTrabalhadasMes() {
 
 		if (this.getApontamentos() != null
 		&& this.getApontamentos().size() > 0) {
@@ -148,7 +148,7 @@ public final class Mes {
 	/**
 	 * Recalcula a quantidade de horas trabalhadas nos apontamentos.
 	 */
-	private void reCalcularQuantidadeHorasTrabalhadasApontamentos(PontoEletronicoConfig pontoEletronicoConfig) {
+	public void reCalcularQuantidadeHorasTrabalhadasApontamentos(PontoEletronicoConfig pontoEletronicoConfig) {
 		if (this.getApontamentos() != null
 		&& this.getApontamentos().size() > 0) {
 			for (Iterator<Entry<String, Apontamento>> iterator = this.getApontamentos().entrySet().iterator(); iterator.hasNext();) {

@@ -43,7 +43,7 @@ public final class Main {
     				"Utilize: \n" +
     				"marcarPonto --> Inicia o servico de marcacao de ponto. \n" +
     				"gerarRelatorio --> Gera relatorio excel com todos os dados contidos na base do sistema. \n" +
-    				"gerarRelatorio [mes de referencia] --> Gera o relatorio de um mes especifico, por exemplo, use gerarRelatorio jun/2009.");
+    				"gerarRelatorio [mes de referencia] --> Gera o relatorio de um mes especifico, por exemplo, use gerarRelatorio 2009-07.");
     		System.exit(0);
     	}
     	
