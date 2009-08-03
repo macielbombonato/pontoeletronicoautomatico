@@ -30,10 +30,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
         try {
             boolean continuar = true;
             
-        	PontoEletronico pontoEletronico = PontoEletronicoFileUtil.obterArquivoMarcacao();
-        	
-        	PontoEletronicoConfig pontoEletronicoConfig = PontoEletronicoFileUtil.obterArquivoConfiguracao();
-
         	Calendar agora = GregorianCalendar.getInstance();
         	
             while (continuar) {

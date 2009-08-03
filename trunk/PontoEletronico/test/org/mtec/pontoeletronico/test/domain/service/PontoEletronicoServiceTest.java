@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -178,6 +179,17 @@ public class PontoEletronicoServiceTest {
 	@Test
 	public void testMarcarPontoReal() {
         PontoEletronicoService service = new PontoEletronicoServiceImpl();
+    	// Injecao de dependencia.
+    	try {
+			service.setPontoEletronico(PontoEletronicoFileUtil.obterArquivoMarcacao());
+		} catch (IOException e) {
+			log.error("Erro ao obter arquivo XML de ponto eletronico.", e);
+		}
+    	try {
+			service.setPontoEletronicoConfig(PontoEletronicoFileUtil.obterArquivoConfiguracao());
+		} catch (IOException e) {
+			log.error("Erro ao obter arquivo de configuracao do sistema.", e);
+		}
         service.marcarPonto(false);
 	}
 
