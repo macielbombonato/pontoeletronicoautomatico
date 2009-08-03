@@ -82,6 +82,8 @@ public final class PontoEletronico {
 		
 		mes.gerarMesApontamento(pontoEletronicoConfig);
 		
+		reCalcularQuantidadeHorasTrabalhadasMeses(pontoEletronicoConfig);
+		
 		calcularQuantidadeTotalHorasTrabalhadas();
 	}
 	
@@ -113,6 +115,24 @@ public final class PontoEletronico {
 							mes.getQtdHorasTrabalhadas()
 						);	
 				}
+			}
+		}
+	}
+	
+	/**
+	 * Recalcula a quantidade de horas trabalhadas nos apontamentos.
+	 */
+	private void reCalcularQuantidadeHorasTrabalhadasMeses(PontoEletronicoConfig pontoEletronicoConfig) {
+		if (this.getMesesApontamento() != null
+		&& this.getMesesApontamento().size() > 0) {
+			for (Iterator<Entry<String, Mes>> iterator = this.getMesesApontamento().entrySet().iterator(); iterator.hasNext();) {
+				Entry<String, Mes> entry = iterator.next();
+				
+				Mes mes = entry.getValue();
+				
+				mes.reCalcularQuantidadeHorasTrabalhadasApontamentos(pontoEletronicoConfig);
+				
+				mes.calcularQuantidadeHorasTrabalhadasMes();
 			}
 		}
 	}
