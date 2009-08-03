@@ -21,6 +21,7 @@ import org.mtec.pontoeletronico.domain.Periodo;
 import org.mtec.pontoeletronico.domain.PontoEletronico;
 import org.mtec.pontoeletronico.domain.service.PontoEletronicoServiceImpl;
 import org.mtec.pontoeletronico.domain.service.interfaces.PontoEletronicoService;
+import org.mtec.pontoeletronico.util.PontoEletronicoFileUtil;
 
 import com.thoughtworks.xstream.XStream;
 
@@ -144,11 +145,11 @@ public class PontoEletronicoServiceTest {
 		pontoEletronicoService.setPontoEletronicoConfig(pontoEletronicoConfig);
 		pontoEletronicoService.marcarPonto(false);
 		
-		XStream xstream = pontoEletronicoService.getPontoEletronicoSchema();
+		XStream xstream = PontoEletronicoFileUtil.getPontoEletronicoSchema();
 		
 		String xml = xstream.toXML(pontoEletronico);
 		
-		XStream xstreamConfig = pontoEletronicoService.getPontoEletronicoConfigSchema();
+		XStream xstreamConfig = PontoEletronicoFileUtil.getPontoEletronicoConfigSchema();
 		
 		String xmlConfig = xstreamConfig.toXML(pontoEletronicoConfig);
 		
