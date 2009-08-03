@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.configuracao.domain.PontoEletronicoConfig;
@@ -24,12 +25,25 @@ public final class PontoEletronicoFileUtil {
 	
 	private static final String DIRETORIO = System.getProperty("user.home") + "/pontoeletronico";
 	private static String NOME_ARQUIVO;
-	
 	private static final String NOME_ARQUIVO_CONFIG = "pontoEletronicoConfig.xml";
+	private static String NOME_ARQUIVO_RELATORIO;
     
     static {
     	try {
 			NOME_ARQUIVO = InetAddress.getLocalHost().getHostName() + "_" + System.getProperty("user.name") + ".xml";
+		} catch (UnknownHostException e) {
+			log.error("Erro ao montar o nome do arquivo.", e);
+		}
+		
+		try {
+			NOME_ARQUIVO_RELATORIO = 
+				InetAddress.getLocalHost().getHostName() + "_" + 
+				System.getProperty("user.name") + "_" +
+				PontoEletronicoUtil.formatDate(
+						new Date(), 
+						PontoEletronicoUtil.PATTERN_YYYY_MM
+					) +
+				".xls";
 		} catch (UnknownHostException e) {
 			log.error("Erro ao montar o nome do arquivo.", e);
 		}
@@ -175,6 +189,26 @@ public final class PontoEletronicoFileUtil {
         fos.write(xstream.toXML(pontoEletronicoConfig).getBytes());
         
         fos.close();
+    }
+    
+    /**
+     * Cria Arquivo Excel de relatorio de apontamento.
+     * @return File
+     * @throws IOException
+     */
+    public static File criaArquivoRelatrio() throws IOException {
+        log.info("Criando arquivo de relatorio de ponto eletronico.");
+        
+        File diretorioArquivo = new File(DIRETORIO);
+
+        if (!diretorioArquivo.exists()) {
+            diretorioArquivo.mkdir();
+        }
+
+        File arquivoRelatorio = new File(DIRETORIO + "/" + NOME_ARQUIVO_RELATORIO);
+        arquivoRelatorio.createNewFile();
+
+        return arquivoRelatorio;
     }
     
 	/**

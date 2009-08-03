@@ -2,8 +2,12 @@ package org.mtec.pontoeletronico.main;
 
 import java.io.IOException;
 
+import jxl.Workbook;
+
 import org.apache.log4j.Logger;
+import org.mtec.pontoeletronico.domain.service.ExcelReportServiceImpl;
 import org.mtec.pontoeletronico.domain.service.PontoEletronicoServiceImpl;
+import org.mtec.pontoeletronico.domain.service.interfaces.ExcelReportService;
 import org.mtec.pontoeletronico.domain.service.interfaces.PontoEletronicoService;
 import org.mtec.pontoeletronico.util.PontoEletronicoFileUtil;
 
@@ -47,13 +51,51 @@ public final class Main {
     	} else if (args != null
     	&& args.length == 1
     	&& args[0].equalsIgnoreCase("gerarRelatorio")) {
-    		// TODO implementar
-    		System.out.println("TODO: Gerar relatorio.");
+    		ExcelReportService service = new ExcelReportServiceImpl();
+
+        	// Injecao de dependencia.
+        	try {
+				service.setPontoEletronico(PontoEletronicoFileUtil.obterArquivoMarcacao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo XML de ponto eletronico.", e);
+			}
+        	try {
+				service.setPontoEletronicoConfig(PontoEletronicoFileUtil.obterArquivoConfiguracao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo de configuracao do sistema.", e);
+			}
+			
+			try {
+				service.setWorkbook(Workbook.createWorkbook(PontoEletronicoFileUtil.criaArquivoRelatrio()));
+			} catch (IOException e) {
+				log.error("Erro ao criar o arquivo de relatorio de apontamento de horas.", e);
+			}
+        	
+    		service.gerarRelatorio();
     	} else if (args != null
     	&& args.length == 2
     	&& args[0].equalsIgnoreCase("gerarRelatorio")) {
-    		// TODO implementar
-    		System.out.println("TODO: Gerar relatorio mes referencia: " + args[1]);
+    		ExcelReportService service = new ExcelReportServiceImpl();
+
+        	// Injecao de dependencia.
+        	try {
+				service.setPontoEletronico(PontoEletronicoFileUtil.obterArquivoMarcacao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo XML de ponto eletronico.", e);
+			}
+        	try {
+				service.setPontoEletronicoConfig(PontoEletronicoFileUtil.obterArquivoConfiguracao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo de configuracao do sistema.", e);
+			}
+			
+			try {
+				service.setWorkbook(Workbook.createWorkbook(PontoEletronicoFileUtil.criaArquivoRelatrio()));
+			} catch (IOException e) {
+				log.error("Erro ao criar o arquivo de relatorio de apontamento de horas.", e);
+			}
+        	
+    		service.gerarRelatorio(args[1]);
     	} else {
     		log.info("Aplicacao nao foi inicializada corretamente.\n" +
     				"Utilize: \n" +
