@@ -1,8 +1,11 @@
 package org.mtec.pontoeletronico.main;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.mtec.pontoeletronico.domain.service.PontoEletronicoServiceImpl;
 import org.mtec.pontoeletronico.domain.service.interfaces.PontoEletronicoService;
+import org.mtec.pontoeletronico.util.PontoEletronicoFileUtil;
 
 /**
  * @author Maciel Escudero Bombonato
@@ -27,6 +30,19 @@ public final class Main {
     	|| args.length == 0
     	|| args[0].equalsIgnoreCase("marcarPonto")) {
             PontoEletronicoService service = new PontoEletronicoServiceImpl();
+            
+        	// Injecao de dependencia.
+        	try {
+				service.setPontoEletronico(PontoEletronicoFileUtil.obterArquivoMarcacao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo XML de ponto eletronico.", e);
+			}
+        	try {
+				service.setPontoEletronicoConfig(PontoEletronicoFileUtil.obterArquivoConfiguracao());
+			} catch (IOException e) {
+				log.error("Erro ao obter arquivo de configuracao do sistema.", e);
+			}
+        	
             service.marcarPonto(true);	
     	} else if (args != null
     	&& args.length == 1
