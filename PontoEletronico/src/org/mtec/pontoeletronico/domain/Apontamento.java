@@ -124,6 +124,51 @@ public final class Apontamento {
 					this.setSaldoBancoHoras(this.getQtdHorasTrabalhadas());
 				}	
 			}
+		} else {
+			String key = PontoEletronicoUtil.formatDate(
+					this.getDataApontamento(), 
+					PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+				);
+			
+			String keyFeriadoFixo = PontoEletronicoUtil.formatDate(
+					this.getDataApontamento(),
+					PontoEletronicoUtil.PATTERN_DD_MM
+				);
+			
+			String hoje = PontoEletronicoUtil.formatDate(
+					new Date(),
+					PontoEletronicoUtil.PATTERN_DD_MM_YYYY
+				);
+			
+			double qtdHorasTrabalhadas = 0D;
+			if (this.getQtdHorasTrabalhadas() != null) {
+				qtdHorasTrabalhadas = this.getQtdHorasTrabalhadas();
+			}
+			
+			if (!hoje.equalsIgnoreCase(key)) {
+				if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
+				} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
+					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
+				} else if (pontoEletronicoConfig.getFeriadosFixos() != null
+				&& pontoEletronicoConfig.getFeriadosPontesVariaveis() != null
+				&& pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
+				&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
+					this.setSaldoBancoHoras(
+							qtdHorasTrabalhadas - 
+							pontoEletronicoConfig.getQtdHorasTrabalhoDiario()
+						);
+					
+					if (this.getObservacoes() == null
+					|| this.getObservacoes().equalsIgnoreCase("")
+					&& this.getSaldoBancoHoras() != null
+					&& this.getSaldoBancoHoras() < 0) {
+						this.setObservacoes("Retirada do Banco de Horas.");
+					}
+				} else {
+					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
+				}	
+			}
 		}
 	}
 
