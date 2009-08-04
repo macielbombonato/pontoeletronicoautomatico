@@ -16,6 +16,8 @@ public class PontoEletronicoConfig {
 	
 	private String nomeAprovador;
 	
+	private String nomeEmpresaUsuario;
+
 	private double qtdHorasTrabalhoDiario;
 	
 	private double horaInicioAlmoco;
@@ -35,6 +37,7 @@ public class PontoEletronicoConfig {
 		
 		this.setNomeUsuario(System.getProperty("user.name"));
 		this.setNomeAprovador("_");
+		this.setNomeEmpresaUsuario("_");
 		this.setQtdHorasTrabalhoDiario(8D);
 		this.setHoraInicioAlmoco(12);
 		this.setHoraFimAlmoco(13);
@@ -151,5 +154,19 @@ public class PontoEletronicoConfig {
 	 */
 	public void setHoraFimAlmoco(double horaFimAlmoco) {
 		this.horaFimAlmoco = horaFimAlmoco;
+	}
+	
+	/**
+	 * @return the nomeEmpresaUsuario
+	 */
+	public String getNomeEmpresaUsuario() {
+		return nomeEmpresaUsuario;
+	}
+
+	/**
+	 * @param nomeEmpresaUsuario the nomeEmpresaUsuario to set
+	 */
+	public void setNomeEmpresaUsuario(String nomeEmpresaUsuario) {
+		this.nomeEmpresaUsuario = nomeEmpresaUsuario;
 	}
 }
