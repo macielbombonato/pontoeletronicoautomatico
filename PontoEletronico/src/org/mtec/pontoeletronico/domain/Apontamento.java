@@ -145,7 +145,8 @@ public final class Apontamento {
 				qtdHorasTrabalhadas = this.getQtdHorasTrabalhadas();
 			}
 			
-			if (!hoje.equalsIgnoreCase(key)) {
+			if (!hoje.equalsIgnoreCase(key)
+			&& this.getDataApontamento().before(new Date())) {
 				if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
 					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
 				} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
