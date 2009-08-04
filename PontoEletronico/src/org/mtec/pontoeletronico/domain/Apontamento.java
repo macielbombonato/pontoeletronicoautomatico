@@ -147,11 +147,9 @@ public final class Apontamento {
 			
 			if (!hoje.equalsIgnoreCase(key)
 			&& this.getDataApontamento().before(new Date())) {
-				if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
-					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
-				} else if (data.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
-					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
-				} else if (pontoEletronicoConfig.getFeriadosFixos() != null
+				if (data.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY
+				&& data.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY
+				&& pontoEletronicoConfig.getFeriadosFixos() != null
 				&& pontoEletronicoConfig.getFeriadosPontesVariaveis() != null
 				&& pontoEletronicoConfig.getFeriadosFixos().get(keyFeriadoFixo) == null
 				&& pontoEletronicoConfig.getFeriadosPontesVariaveis().get(key) == null) {
@@ -166,7 +164,7 @@ public final class Apontamento {
 					&& this.getSaldoBancoHoras() < 0) {
 						this.setObservacoes("Retirada do Banco de Horas.");
 					}
-				} else {
+				} else if (qtdHorasTrabalhadas > 0) {
 					this.setSaldoBancoHoras(qtdHorasTrabalhadas);
 				}	
 			}
