@@ -24,7 +24,6 @@ public final class PontoEletronicoServiceImpl implements PontoEletronicoService 
 	
 	private PontoEletronicoConfig pontoEletronicoConfig;
 	
-	@Override
 	public void marcarPonto(boolean isDaemon) {
 		log.info("Inicio do processo de marcacao de ponto.");
         try {
