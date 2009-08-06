@@ -91,7 +91,6 @@ public class ExcelReportServiceImpl implements ExcelReportService {
 	/* (non-Javadoc)
 	 * @see org.mtec.pontoeletronico.domain.service.interfaces.ExcelReportService#gerarRelatorio()
 	 */
-	@Override
 	public void gerarRelatorio() {
 		log.info("Geracao de relatorio completo de apontamentos.");
 		
@@ -116,7 +115,6 @@ public class ExcelReportServiceImpl implements ExcelReportService {
 	/* (non-Javadoc)
 	 * @see org.mtec.pontoeletronico.domain.service.interfaces.ExcelReportService#gerarRelatorio(java.lang.String)
 	 */
-	@Override
 	public void gerarRelatorio(String mesReferencia) {
 		log.info("Geracao de relatorio de um mes selecionado.");
 		
