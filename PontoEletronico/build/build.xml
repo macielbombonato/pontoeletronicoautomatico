@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project PontoEletronico">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <mkdir dir="../distribution"/>
+    	<jar destfile="../distribution/MTech_PontoEletronico-1.0.0.jar" filesetmanifest="mergewithoutmain">
+            <manifest>
+                <attribute name="Main-Class" value="org.mtec.pontoeletronico.main.Main"/>
+                <attribute name="Class-Path" value="."/>
+            </manifest>
+            <fileset dir="C:/home/workspace/PontoEletronico/bin"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/tools/eclipse/plugins/org.junit4_4.5.0.v20090824/junit.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/tools/eclipse/plugins/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/cglib-nodep-2.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/dom4j-1.6.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/jdom-1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/jettison-1.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/joda-time-1.6.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/log4j-1.2.15.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/stax-1.2.0.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/stax-api-1.0.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/wstx-asl-3.2.7.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/xml-writer-0.2.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/xom-1.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/xpp3_min-1.1.4c.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/xstream-1.3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/xstream-benchmark-1.3.1.jar"/>
+            <zipfileset excludes="META-INF/*.SF" src="C:/home/workspace/PontoEletronico/lib/jxl.jar"/>
+        </jar>
+    </target>
+</project>
