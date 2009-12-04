@@ -49,6 +49,21 @@ public class PontoEletronicoConfig {
 		anoNovo.setNomeFeriado("Ano novo");
 		this.getFeriadosFixos().put(anoNovo.getDataFeriado(), anoNovo);
 		
+		FeriadosPontes tiradentes = new FeriadosPontes();
+		anoNovo.setDataFeriado("21/04");
+		anoNovo.setNomeFeriado("Tiradentes");
+		this.getFeriadosFixos().put(tiradentes.getDataFeriado(), tiradentes);
+		
+		FeriadosPontes independencia = new FeriadosPontes();
+		anoNovo.setDataFeriado("07/09");
+		anoNovo.setNomeFeriado("Idependencia");
+		this.getFeriadosFixos().put(independencia.getDataFeriado(), independencia);
+		
+		FeriadosPontes proclamacao = new FeriadosPontes();
+		anoNovo.setDataFeriado("15/11");
+		anoNovo.setNomeFeriado("Proclamacao da Republica");
+		this.getFeriadosFixos().put(proclamacao.getDataFeriado(), proclamacao);
+		
 		FeriadosPontes natal = new FeriadosPontes();
 		natal.setDataFeriado("25/12");
 		natal.setNomeFeriado("Natal");
