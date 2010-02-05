@@ -70,6 +70,16 @@ public class PontoEletronicoConfig {
 		this.getFeriadosFixos().put(natal.getDataFeriado(), natal);
 		
 		this.setFeriadosPontesVariaveis(new TreeMap<String, FeriadosPontes>());
+		
+		FeriadosPontes aniversarioSaoPaulo2010 = new FeriadosPontes();
+		aniversarioSaoPaulo2010.setDataFeriado("25/01/2010");
+		aniversarioSaoPaulo2010.setNomeFeriado("Aniversario Sao Paulo");
+		this.getFeriadosPontesVariaveis().put(aniversarioSaoPaulo2010.getDataFeriado(), natal);
+		
+		FeriadosPontes carnaval2010 = new FeriadosPontes();
+		carnaval2010.setDataFeriado("16/02/2010");
+		carnaval2010.setNomeFeriado("Carnaval");
+		this.getFeriadosPontesVariaveis().put(carnaval2010.getDataFeriado(), natal);
 	}
 
 	/**
