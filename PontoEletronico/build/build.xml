@@ -8,7 +8,7 @@
             <manifest>
                 <attribute name="Main-Class" value="org.mtec.pontoeletronico.main.Main"/>
             </manifest>
-            <fileset dir="C:/home/workspace/PontoEletronico/bin"/>
+            <fileset dir="../bin"/>
         </jar>
     </target>
 </project>
